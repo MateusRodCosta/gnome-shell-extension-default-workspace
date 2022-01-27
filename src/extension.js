@@ -11,7 +11,9 @@ const DEFAULT_WORKSPACE_SCHEMA = 'org.gnome.shell.extensions.default-workspace';
 const DEFAULT_WORKSPACE_KEY = 'default-workspace-number';
 
 class Extension {
+
     constructor() {
+      this.handlerStartup = null;
     }
 
     enable() {
@@ -20,13 +22,17 @@ class Extension {
       if (!Main.layoutManager._startingUp) {
         return;
       }
-      Main.layoutManager.connect('startup-complete', () => {
+      this.handlerStartup = Main.layoutManager.connect('startup-complete', () => {
         let ws = settings.get_int(DEFAULT_WORKSPACE_KEY);
         this._changeWorkspace(ws -1);
       });
     }
 
     disable() {
+      if(this.handlerStartup) {
+        Main.layoutManager.disconnect(this.handlerStartup);
+        this.handlerStartup = null;
+      }
     }
 
     // This is based on code from Workspace Indicator
