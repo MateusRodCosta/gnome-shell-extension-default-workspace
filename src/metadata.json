@@ -1,0 +1,8 @@
+{
+	"name": "Default Workspace",
+	"description": "Switches to the specified workspace on login.\nUseful for fixed number of workspace setups where the first workspace isn't the main one.",
+	"shell-version": ["40", "41"],
+	"url": "",
+	"uuid": "default-workspace@mateusrodcosta.com",
+	"version": 1
+}

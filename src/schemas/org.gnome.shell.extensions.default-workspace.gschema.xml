@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.default-workspace"
+    path = "/org/gnome/shell/extensions/default-workspace/">
+
+    <key type="i" name="default-workspace-number">
+      <default>2</default>
+      <summary>The default workspace</summary>
+      <description>The number of the desired default workspace</description>
+    </key>
+
+  </schema>
+</schemalist>
