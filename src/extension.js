@@ -24,7 +24,7 @@ class Extension {
         return;
       }
       this.handlerStartup = Main.layoutManager.connect('startup-complete', () => {
-        let ws = settings.get_int(DEFAULT_WORKSPACE_KEY);
+        let ws = this.settings.get_int(DEFAULT_WORKSPACE_KEY);
         this._changeWorkspace(ws -1);
       });
     }
