@@ -17,6 +17,7 @@ class Extension {
     }
 
     enable() {
+      this.settings = ExtensionUtils.getSettings(DEFAULT_WORKSPACE_SCHEMA);
       // The following is based on code from No overview at startup extension
       // That will guarantee gnome-shell doesn't crash
       if (!Main.layoutManager._startingUp) {
@@ -33,6 +34,7 @@ class Extension {
         Main.layoutManager.disconnect(this.handlerStartup);
         this.handlerStartup = null;
       }
+      this.settings = null;
     }
 
     // This is based on code from Workspace Indicator
@@ -53,6 +55,5 @@ class Extension {
 }
 
 function init() {
-  this.settings = ExtensionUtils.getSettings(DEFAULT_WORKSPACE_SCHEMA);
   return new Extension();
 }
