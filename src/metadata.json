@@ -4,5 +4,5 @@
 	"shell-version": ["40", "41", "42", "43"],
 	"url": "https://github.com/MateusRodCosta/gnome-shell-extension-default-workspace",
 	"uuid": "default-workspace@mateusrodcosta.com",
-	"version": 1
+	"version": 3
 }
