@@ -2,4 +2,4 @@
 
 A gnome-shell extension that switches to the specified workspace on login.
 
-Supports GNOME 40+.
+Supports GNOME 45+.

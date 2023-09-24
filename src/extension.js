@@ -2,58 +2,42 @@
 // Uses code from No overview extension and Workspace Indicator
 // Contributors: @MateusRodCost, @fthx, @fmuellner
 
-const Gio = imports.gi.Gio;
-const Main = imports.ui.main;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import {layoutManager} from 'resource:///org/gnome/shell/ui/main.js';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-const DEFAULT_WORKSPACE_SCHEMA = 'org.gnome.shell.extensions.default-workspace';
 const DEFAULT_WORKSPACE_KEY = 'default-workspace-number';
 
-class Extension {
+export default class DefaultWorkspaceExtension extends Extension {
+  enable() {
+    this._settings = this.getSettings();
+    let defaultWorkspace = this._settings.get_int(DEFAULT_WORKSPACE_KEY);
 
-    constructor() {
-      this.handlerStartup = null;
+    if (!layoutManager._startingUp) {
+      return;
     }
 
-    enable() {
-      this.settings = ExtensionUtils.getSettings(DEFAULT_WORKSPACE_SCHEMA);
-      // The following is based on code from No overview at startup extension
-      // That will guarantee gnome-shell doesn't crash
-      if (!Main.layoutManager._startingUp) {
-        return;
-      }
-      this.handlerStartup = Main.layoutManager.connect('startup-complete', () => {
-        let ws = this.settings.get_int(DEFAULT_WORKSPACE_KEY);
-        this._changeWorkspace(ws -1);
-      });
+    this._startupHandler = layoutManager.connect('startup-complete', () => {
+      this._changeWorkspace(defaultWorkspace);
+    });
+  }
+
+  disable() {
+    if (this._startupHandler) {
+      layoutManager.disconnect(this.handlerStartup);
+      this._startupHandler = null;
     }
+    this._settings = null;
+  }
 
-    disable() {
-      if(this.handlerStartup) {
-        Main.layoutManager.disconnect(this.handlerStartup);
-        this.handlerStartup = null;
-      }
-      this.settings = null;
+  _changeWorkspace(index) {
+    let workspaceManager = global.workspace_manager;
+    let goalWorkspace = workspaceManager.get_workspace_by_index(index - 1);
+
+    if(goalWorkspace){
+      goalWorkspace.activate(global.get_current_time());
+      console.info(`${this.uuid}: Switched to workspace ${index} on login`);
+    } else {
+      console.warn(`${this.uuid}: Unable to switch to a invalid workspace (chosen workspace was ${index})`);
     }
-
-    // This is based on code from Workspace Indicator
-    // This will guarantee the workspace in the most correct way
-    _changeWorkspace(index) {
-      let workspaceManager = global.workspace_manager;
-
-      if (index >= 0 && index < workspaceManager.n_workspaces) {
-        let metaWorkspace = workspaceManager.get_workspace_by_index(index);
-        if(metaWorkspace) {
-          metaWorkspace.activate(global.get_current_time());
-        }
-      } else {
-        log('Unable to switch to a invalid workspace')
-      }
-
-    }
-}
-
-function init() {
-  return new Extension();
+  }
 }

@@ -1,56 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<interface domain="my-gettext-domain">
+<!-- Created with Cambalache 0.16.0 -->
+<interface>
+  <!-- interface-name defaultworkspace.ui -->
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkBox" id="box">
-    <property name="orientation">vertical</property>
-    <property name="halign">center</property>
-    <property name="spacing">12</property>
-    <property name="margin_top">36</property>
-    <property name="margin_bottom">36</property>
-    <property name="margin_start">36</property>
-    <property name="margin_end">36</property>
+  <requires lib="libadwaita" version="1.4"/>
+  <object class="AdwPreferencesPage" id="preferences_main_page">
     <child>
-      <object class="GtkFrame" id="frame">
+      <object class="AdwPreferencesGroup" id="workspace_group">
+        <property name="title">Workspace</property>
         <child>
-          <object class="GtkListBox" id="list_box">
-            <property name="selection-mode">none</property>
-            <property name="show_separators">true</property>
-            <child>
-              <object class="GtkListBoxRow" id="default_workspace_row">
-                <child>
-                  <object class="GtkBox" id="default_workspace_box">
-                    <property name="spacing">12</property>
-                    <property name="margin_top">6</property>
-                    <property name="margin_bottom">6</property>
-                    <property name="margin_start">6</property>
-                    <property name="margin_end">6</property>
-                    <child>
-                      <object class="GtkLabel" id="default_workspace_label">
-                        <property name="label">Default Workspace</property>
-                        <property name="hexpand">true</property>
-                        <property name="xalign">0</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="default_workspace_spinbutton">
-                        <property name="adjustment">default_workspace_adjustment</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+          <object class="AdwSpinRow" id="default_workspace_spinrow">
+            <property name="adjustment">
+              <object class="GtkAdjustment" id="default_workspace_adjustment">
+                <property name="lower">1.0</property>
+                <property name="page-increment">1.0</property>
+                <property name="page-size">1.0</property>
+                <property name="step-increment">1.0</property>
+                <property name="upper">37.0</property>
+                <property name="value">1.0</property>
               </object>
-            </child>
+            </property>
+            <property name="title">Default Workspace</property>
           </object>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="default_workspace_adjustment">
-    <property name="lower">1.0</property>
-    <property name="page-increment">1.0</property>
-    <property name="page-size">1.0</property>
-    <property name="step-increment">1.0</property>
-    <property name="upper">37.0</property>
-    <property name="value">1.0</property>
   </object>
 </interface>

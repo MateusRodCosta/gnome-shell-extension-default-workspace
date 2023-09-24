@@ -5,8 +5,8 @@
 
     <key type="i" name="default-workspace-number">
       <default>2</default>
-      <summary>The default workspace</summary>
-      <description>The number of the desired default workspace</description>
+      <summary>The number of chosen default workspace</summary>
+      <description>The default workspace is 2, as that is the minimum you have with dynamic workspaces.</description>
     </key>
 
   </schema>

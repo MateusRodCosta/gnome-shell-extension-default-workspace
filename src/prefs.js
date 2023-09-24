@@ -1,47 +1,29 @@
-const {GObject, Gtk, Gio} = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk';
+import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-const DEFAULT_WORKSPACE_SCHEMA = 'org.gnome.shell.extensions.default-workspace';
 const DEFAULT_WORKSPACE_KEY = 'default-workspace-number';
 
-const DefaultWorkspaceBuilderScope = GObject.registerClass({
-    Implements: [Gtk.BuilderScope],
-}, class DefaultWorkspaceBuilderScope extends GObject.Object {
+export default class DefaultWorkspacePreferences extends ExtensionPreferences {
 
-  vfunc_create_closure(builder, handlerName, flags, connectObject) {
-    if (flags & Gtk.BuilderClosureFlags.SWAPPED)
-      throw new Error('Unsupported template signal flag "swapped"');
+  fillPreferencesWindow(window) {
+    let settings = this.getSettings();
 
-    if (typeof this[handlerName] === 'undefined')
-      throw new Error(`${handlerName} is undefined`);
+    let builder = new Gtk.Builder();
 
-    return this[handlerName].bind(connectObject || this);
+    builder.add_from_file(`${this.path}/ui/prefs.ui`);
+
+    let spin_row = builder.get_object('default_workspace_spinrow');
+    if (spin_row) {
+      settings.bind(
+        DEFAULT_WORKSPACE_KEY,
+        spin_row,
+        'value',
+        Gio.SettingsBindFlags.DEFAULT
+      );
+    }
+
+    let page = builder.get_object('preferences_main_page');
+    window.add(page);
   }
-
-});
-
-function init () {}
-
-function buildPrefsWidget () {
-
-  this.settings = ExtensionUtils.getSettings(DEFAULT_WORKSPACE_SCHEMA);
-
-  let builder = new Gtk.Builder();
-
-  builder.set_scope(new DefaultWorkspaceBuilderScope());
-  builder.set_translation_domain('gettext-domain');
-  builder.add_from_file(Me.dir.get_path() + '/ui/prefs.ui');
-
-  let sb = builder.get_object('default_workspace_spinbutton');
-  if(sb) {
-    this.settings.bind(
-      DEFAULT_WORKSPACE_KEY,
-      sb,
-      'value',
-      Gio.SettingsBindFlags.DEFAULT
-    );
-  }
-
-  return builder.get_object('box');
 }
