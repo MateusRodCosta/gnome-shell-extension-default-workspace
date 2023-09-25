@@ -4,9 +4,10 @@
     path = "/org/gnome/shell/extensions/default-workspace/">
 
     <key type="i" name="default-workspace-number">
+      <range min="1" max="36"/>
       <default>2</default>
-      <summary>The number of chosen default workspace</summary>
-      <description>The default workspace is 2, as that is the minimum you have with dynamic workspaces.</description>
+      <summary>The number of the chosen default workspace</summary>
+      <description>The default chosen workspace is 2, as that is the minimum you have with dynamic workspaces.</description>
     </key>
 
   </schema>
