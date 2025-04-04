@@ -1,9 +1,9 @@
 {
 	"name": "Default Workspace",
 	"description": "Switches to the specified workspace on login.\nUseful for fixed number of workspace setups where the first workspace isn't the main one.",
-	"shell-version": ["45", "46", "47"],
+	"shell-version": ["45", "46", "47", "48"],
 	"url": "https://github.com/MateusRodCosta/gnome-shell-extension-default-workspace",
 	"uuid": "default-workspace@mateusrodcosta.com",
 	"settings-schema": "org.gnome.shell.extensions.default-workspace",
-	"version": 9
+	"version": 10
 }
