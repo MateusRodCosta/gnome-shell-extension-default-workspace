@@ -2,42 +2,49 @@
 // Uses code from No overview extension and Workspace Indicator
 // Contributors: @MateusRodCost, @fthx, @fmuellner
 
-import {layoutManager} from 'resource:///org/gnome/shell/ui/main.js';
-import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import { layoutManager } from 'resource:///org/gnome/shell/ui/main.js';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 
 const DEFAULT_WORKSPACE_KEY = 'default-workspace-number';
 
 export default class DefaultWorkspaceExtension extends Extension {
   enable() {
     this._settings = this.getSettings();
-    let defaultWorkspace = this._settings.get_int(DEFAULT_WORKSPACE_KEY);
 
     if (!layoutManager._startingUp) {
       return;
     }
 
     this._startupHandler = layoutManager.connect('startup-complete', () => {
-      this._changeWorkspace(defaultWorkspace);
+      this._changeWorkspace();
     });
   }
 
   disable() {
     if (this._startupHandler) {
-      layoutManager.disconnect(this.handlerStartup);
+      layoutManager.disconnect(this._startupHandler);
       this._startupHandler = null;
     }
+
     this._settings = null;
   }
 
-  _changeWorkspace(index) {
-    let workspaceManager = global.workspace_manager;
-    let goalWorkspace = workspaceManager.get_workspace_by_index(index - 1);
+  _changeWorkspace() {
+    const targetIndex = this._settings.get_int(DEFAULT_WORKSPACE_KEY);
+    const targetIndexZeroBased = targetIndex - 1;
+    const workspaceManager = global.workspace_manager;
+
+    while (workspaceManager.get_n_workspaces() <= targetIndexZeroBased) {
+      workspaceManager.append_new_workspace(false, global.get_current_time());
+    }
+
+    const goalWorkspace = workspaceManager.get_workspace_by_index(targetIndexZeroBased);
 
     if(goalWorkspace){
       goalWorkspace.activate(global.get_current_time());
-      console.info(`${this.uuid}: Switched to workspace ${index} on login`);
+      console.info(`${this.uuid}: Switched to workspace ${targetIndex} on login`);
     } else {
-      console.warn(`${this.uuid}: Unable to switch to a invalid workspace (chosen workspace was ${index})`);
+      console.warn(`${this.uuid}: CRITICAL - Workspace ${targetIndex} failed to instantiate.`);
     }
   }
 }
