@@ -15,14 +15,14 @@ export default class DefaultWorkspaceExtension extends Extension {
       return;
     }
 
-    this._startupHandler = layoutManager.connect('startup-complete', () => {
+    this._startupHandler = layoutManager.connectObject('startup-complete', () => {
       this._changeWorkspace();
     });
   }
 
   disable() {
     if (this._startupHandler) {
-      layoutManager.disconnect(this._startupHandler);
+      layoutManager.disconnectObject(this._startupHandler);
       this._startupHandler = null;
     }
 
