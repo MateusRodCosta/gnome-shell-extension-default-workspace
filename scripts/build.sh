@@ -3,20 +3,24 @@
 # Script to build the extension zip and install the package
 #
 # This Script is released under GPL v3 license
-# Copyright (C) 2020-2022 Javad Rahmatzadeh
+# Copyright (C) 2020-2026 Javad Rahmatzadeh
 
 set -e
 
 # cd to the repo root
 cd "$( cd "$( dirname "$0" )" && pwd )/.."
 
+echo "Compiling Resources..."
+glib-compile-resources \
+    --sourcedir src/data \
+    src/data/resources.gresource.xml
+
 echo "Packing extension..."
 gnome-extensions pack src \
     --force \
     --podir="../po" \
-    --extra-source="bin" \
+    --extra-source="data/resources.gresource" \
     --extra-source="lib" \
-    --extra-source="ui" \
     --extra-source="../LICENSE" \
     --extra-source="../CHANGELOG.md"
 
@@ -36,3 +40,4 @@ while getopts i flag; do
             exit 1;;
     esac
 done
+
