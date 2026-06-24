@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <schemalist>
   <schema id="org.gnome.shell.extensions.default-workspace"
-    path = "/org/gnome/shell/extensions/default-workspace/">
+    path="/org/gnome/shell/extensions/default-workspace/"
+    gettext-domain="default-workspace">
 
     <key type="i" name="default-workspace-number">
       <range min="1" max="36"/>
       <default>2</default>
-      <summary>The number of the chosen default workspace</summary>
-      <description>The default chosen workspace is 2, as that is the minimum you have with dynamic workspaces.</description>
+      <summary>The index of the chosen default workspace</summary>
+      <description>The default chosen workspace is 2. Extra workspaces might be spawned as needed if a higher number than the current number of workspaces is given.</description>
     </key>
 
   </schema>
